@@ -1,8 +1,3 @@
-- BattleArena
-- OldCombatMechanics
-- TNTAutoLit
-- TNTimer (don't see through walls)
-
 recommended Plugins/Links:
 - [BattleArena](https://hangar.papermc.io/BattlePlugins/BattleArena)
 - [OldCombatMechanics](https://www.spigotmc.org/resources/oldcombatmechanics-disable-1-9-hit-cooldown.19510/)
