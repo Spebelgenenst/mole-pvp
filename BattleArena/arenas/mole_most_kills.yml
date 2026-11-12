@@ -1,0 +1,104 @@
+name: mole_most_kills
+aliases: [mole_most_kills]
+mode: Arena
+type: Match
+team-options:
+  named-teams: false
+  team-size: 1
+  team-amount: 2-4
+  team-selection: random
+modules:
+  - arena-restoration
+  - duels
+lives:
+  enabled: false
+victory-conditions:
+  time-limit:
+    time-limit: 5m
+  highest-stat:
+    stat-name: kills
+events:
+  on-join:
+    - store{types=all}
+    - change-gamemode{gamemode=survival}
+    - teleport{location=waitroom}
+  on-spectate:
+    - store{types=all}
+    - change-gamemode{gamemode=spectator}
+    - teleport{location=spectator}
+  on-leave:
+    - clear-effects
+    - restore{types=all}
+  on-death:
+    - respawn
+  on-respawn:
+    - delay{ticks=1}
+    - teleport{location=team_spawn}
+    - clear-effects
+    - clear-inventory
+    - give-item{item=stone_sword{unbreakable=true;enchantments=[knockback:1]};slot=0}
+    - give-item{item=diamond_shovel{unbreakable=true;enchantments=[efficiency:3]};slot=1}
+    - give-item{item=diamond_pickaxe{unbreakable=true};slot=2}
+    - give-item{item=golden_apple{amount=8};slot=3}
+    - give-item{item=tnt{amount=16};slot=4}
+    - teleport{location=team_spawn}
+    - give-effects{effects=[night_vision{duration=1000000;particles=false},health_boost{amplifier=10;duration=1000000;particles=false}]}
+    - health{health=60;hunger=20}
+options:
+  - block-break{enabled=true}
+  - block-place{enabled=true}
+  - block-interact{enabled=true}
+  - damage-entities{option=always}
+  - keep-inventory{enabled=true}
+  - keep-experience{enabled=true}
+  - item-drops{enabled=false}
+initial-phase: waiting
+phases:
+  waiting:
+    allow-join: true
+    next-phase: countdown
+    options:
+      - damage-players{option=never}
+  countdown:
+    allow-join: true
+    allow-spectate: true
+    revert-phase: true
+    next-phase: ingame
+    countdown-time: 15s
+    options:
+      - damage-players{option=never}
+  ingame:
+    allow-join: false
+    allow-spectate: true
+    next-phase: victory
+    options:
+      - damage-players{option=other_team}
+    events:
+      on-start:
+        - give-item{item=stone_sword{unbreakable=true;enchantments=[knockback:1]};slot=0}
+        - give-item{item=diamond_shovel{unbreakable=true;enchantments=[efficiency:3]};slot=1}
+        - give-item{item=diamond_pickaxe{unbreakable=true};slot=2}
+        - give-item{item=golden_apple{amount=8};slot=3}
+        - give-item{item=tnt{amount=16};slot=4}
+        - teleport{location=team_spawn}
+        - give-effects{effects=[night_vision{duration=1000000;particles=false},haste{duration=30;amplifier=4},health_boost{amplifier=10;duration=1000000;particles=false}]}
+        - health{health=60;hunger=20}
+        - play-sound{sound=block.note_block.pling;pitch=2;volume=1}
+  victory:
+    allow-join: false
+    allow-spectate: true
+    next-phase: waiting
+    duration: 5s
+    events:
+      on-complete:
+        - leave
+        - restore-arena
+      on-victory:
+        - send-message{message=<green>Congrats, you won!</green>}
+        - play-sound{sound=entity.player.levelup;pitch=1;volume=1}
+      on-lose:
+        - send-message{message=<red>Sorry, you lost!</red>}
+        - play-sound{sound=block.anvil.place;pitch=0;volume=1}
+      on-draw:
+        - send-message{message=<yellow>It's a draw!</yellow>}
+        - play-sound{sound=block.beacon.deactivate;pitch=0;volume=1}
