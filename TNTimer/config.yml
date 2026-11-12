@@ -1,0 +1,9 @@
+enabled: true
+mode: auto
+sulfur-cubes: true
+
+display:
+  background: true
+  shadow: true
+  see-through: false #i changed this
+  offset: 0.25

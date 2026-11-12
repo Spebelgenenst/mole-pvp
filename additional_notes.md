@@ -1,0 +1,1 @@
+- /mole leave works in every arena (the plugin doesn't care about the alias)
